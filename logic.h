@@ -13,10 +13,12 @@ typedef enum {
    RUNNING_MODE = 2
 } game_state;
 
-void render(int * grid, HWND hwnd);
+void render(int* grid, HWND hwnd);
 
-void draw(const int * grid, const HWND * hwnd, const HBRUSH * hBrush);
+void draw(const int* grid, const HWND* hwnd, const HBRUSH* hBrush);
 
-void game_input(game_state * g_state, HWND hwnd);
+void game_input(game_state* g_state);
 
-int leftButtonTrigger(int * grid, const HWND* hwnd, const LPARAM* lParam, game_state* g_state);
+void leftButtonTrigger(int* grid, const HWND* hwnd, const LPARAM* lParam,const  game_state* g_state);
+
+void clearGrid(int* grid,const  game_state* g_state);

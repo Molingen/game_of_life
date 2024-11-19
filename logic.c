@@ -1,11 +1,14 @@
 #include <stdio.h>
-#include <windows.h>
 
 #include "logic.h"
 #include "constants.h"
 
-void render(int *grid, HWND hwnd) {
+
+
+void render(int* grid, HWND hwnd) {
+
    Sleep(UPDATE_RATE_MS);
+
    int newGrid[GRID_X][GRID_Y];
 
    for (int y = 0; y < GRID_Y; ++y) {
@@ -49,7 +52,8 @@ void render(int *grid, HWND hwnd) {
 }
 
 
-void draw(const int * grid, const HWND * hwnd, const HBRUSH * hBrush) {
+
+void draw(const int* grid, const HWND* hwnd, const HBRUSH* hBrush) {
    PAINTSTRUCT ps;
    HDC hdc_l = BeginPaint(*hwnd, &ps);
 
@@ -88,7 +92,9 @@ void draw(const int * grid, const HWND * hwnd, const HBRUSH * hBrush) {
    EndPaint(*hwnd, &ps);
 }
 
-void game_input(game_state * g_state, HWND hwnd) {
+
+
+void game_input(game_state* g_state) {
 
    if (GetKeyState(VK_SPACE) == 1) {
       *g_state = RUNNING_MODE;
@@ -98,12 +104,26 @@ void game_input(game_state * g_state, HWND hwnd) {
    }
 }
 
-int leftButtonTrigger(int * grid, const HWND* hwnd, const LPARAM* lParam, game_state* g_state) {
-   if (*g_state != INSERT_MODE) {return NULL;}
+
+
+void leftButtonTrigger(int* grid, const HWND* hwnd, const LPARAM* lParam,const game_state* g_state) {
+   if (*g_state != INSERT_MODE) {return;}
    int x = LOWORD(*lParam) / CELL_SIZE;
    int y = HIWORD(*lParam) / CELL_SIZE;
    if (x >= 0 && x < GRID_X && y >= 0 && y < GRID_Y) {
       grid[y + x*GRID_X] = !grid[y + x*GRID_X];
       InvalidateRect(*hwnd, NULL, FALSE);
+   }
+}
+
+
+
+void clearGrid(int* grid,const game_state* g_state) {
+   if (*g_state != INSERT_MODE) {return;}
+
+   for (int x = 0; x < GRID_X; x++) {
+      for (int y = 0; y < GRID_Y; y++) {
+         grid[x*GRID_X + y] = 0;
+      }
    }
 }

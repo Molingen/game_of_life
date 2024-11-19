@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include <windows.h>
 #include <stdio.h>
 #include <string.h>
 #include <tchar.h>
@@ -13,13 +12,12 @@ game_state g_state = INSERT_MODE;
 PAINTSTRUCT ps;
 HBRUSH hBrush;
 
-// The main window class name.
+// The main window class name
 static TCHAR szWindowClass[] = _T("DesktopApp");
 
-// The string that appears in the application's title bar.
 static TCHAR szTitle[] = _T("game of life");
 
-// Stored instance handle for use in Win32 API calls such as FindResource
+// Stored instance handle for use in Win32 API calls such as FindResource.
 HINSTANCE hInst;
 
 // Forward declarations of functions included in this code module:
@@ -83,7 +81,6 @@ int WINAPI WinMain(
       return 1;
    }
 
-
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
@@ -94,7 +91,7 @@ int WINAPI WinMain(
 
    while (g_state != END_PLS) {
 
-      game_input(&g_state, hWnd);
+      game_input(&g_state);
       if (g_state == RUNNING_MODE) {
          render(grid, hWnd);
       }
@@ -113,6 +110,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    switch (message) {
       case WM_LBUTTONDOWN: {
          leftButtonTrigger(grid, &hWnd, &lParam, &g_state);
+         break;
       }
       case WM_PAINT: {
          draw(grid, &hWnd, &hBrush);
@@ -124,10 +122,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       }
       case WM_CLOSE: {
          g_state = END_PLS;
+         break;
+      }
+      case WM_KEYDOWN: {
+         if (wParam == 'C') {
+            clearGrid(grid, &g_state);
+            InvalidateRect(hWnd, NULL, TRUE);
+         }
+         break;
       }
       default:
          return DefWindowProc(hWnd, message, wParam, lParam);
    }
-
    return 0;
 }
