@@ -34,27 +34,3 @@
 '#' Ignore objects and archives
 cmake-build-debug
 .idea/
-
-cmake-build-debug/.ninja_deps
-cmake-build-debug/.ninja_log
-cmake-build-debug/CMakeCache.txt
-
-cmake-build-debug/CMakeFiles/3.29.6/CMakeDetermineCompilerABI_C.bin
-cmake-build-debug/CMakeFiles/3.29.6/CMakeDetermineCompilerABI_CXX.bin
-cmake-build-debug/CMakeFiles/CMakeConfigureLog.yaml
-cmake-build-debug/CMakeFiles/TargetDirectories.txt
-cmake-build-debug/CMakeFiles/clion-Debug-log.txt
-cmake-build-debug/CMakeFiles/rules.ninja
-cmake-build-debug/Testing/Temporary/LastTest.log
-cmake-build-debug/build.ninja
-cmake-build-debug/cmake_install.cmake
-
-CMakeLists.txt.user
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-CMakeUserPresets.json
