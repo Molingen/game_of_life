@@ -3,7 +3,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 800
 
-#define UPDATE_RATE_MS 400
+#define UPDATE_RATE_MS 200
 
 #define CELL_SIZE 20
 
