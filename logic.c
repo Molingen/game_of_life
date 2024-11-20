@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "logic.h"
 #include "constants.h"
@@ -100,7 +101,7 @@ void draw(const int* grid, const HWND* hwnd, const HBRUSH* hBrush) {
 
 
 
-void game_input(game_state* g_state) {
+void gameInput(game_state* g_state) {
 
    if (GetKeyState(VK_SPACE) == 1) {
       *g_state = RUNNING_MODE;
@@ -128,13 +129,81 @@ void leftButtonTrigger(int* grid, const HWND* hwnd, const LPARAM* lParam,const g
 
 
 
-void clearGrid(int* grid,const game_state* g_state) {
-
-   if (*g_state != INSERT_MODE) {return;}
-
+void clearGrid(int* grid) {
    for (int x = 0; x < GRID_X; x++) {
       for (int y = 0; y < GRID_Y; y++) {
          grid[x*GRID_X + y] = 0;
       }
+   }
+}
+
+
+
+void saveGrid(int* grid, const char* filename) {
+
+   FILE* file = fopen(filename, "w");
+
+   if (file == NULL) {
+      perror("Failed to open file");
+      return;
+   }
+
+   for (int i = 0; i < GRID_X; i++) {
+      for (int j = 0; j < GRID_Y; j++) {
+         fprintf(file, "%d ", grid[j*GRID_X + i]);
+      }
+      fprintf(file, "\n");
+   }
+
+   fclose(file);
+}
+
+
+
+void loadGrid(int* grid, const char* filename) {
+
+      FILE* file = fopen(filename, "r");
+
+      if (file == NULL) {
+         perror("Failed to open file");
+         return;
+      }
+
+      for (int x = 0; x < GRID_X; x++) {
+         for (int y = 0; y < GRID_Y; y++) {
+            if (fscanf_s(file, "%d", &grid[y*GRID_X + x]) != 1) {
+               fprintf(stderr, "Error reading grid value at position (%d, %d)\n", x, y);
+               fclose(file);
+               return;
+            }
+         }
+      }
+
+      fclose(file);
+}
+
+
+
+void keyFunctions(int* grid, const HWND* hWnd, const WPARAM *wParam, const game_state *g_state) {
+
+   if (*g_state != INSERT_MODE) {return;}
+
+   switch (*wParam) {
+      case 'C': {
+         clearGrid(grid);
+         InvalidateRect(*hWnd, NULL, TRUE);
+         break;
+      }
+      case 'S': {
+         saveGrid(grid, "./game.txt");
+         break;
+      }
+      case 'L': {
+         loadGrid(grid, "./game.txt");
+         InvalidateRect(*hWnd, NULL, TRUE);
+         break;
+      }
+      default:
+         break;
    }
 }

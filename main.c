@@ -91,7 +91,7 @@ int WINAPI WinMain(
 
    while (g_state != END_PLS) {
 
-      game_input(&g_state);
+      gameInput(&g_state);
       if (g_state == RUNNING_MODE) {
          render(grid, hWnd);
       }
@@ -125,10 +125,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
          break;
       }
       case WM_KEYDOWN: {
-         if (wParam == 'C') {
-            clearGrid(grid, &g_state);
-            InvalidateRect(hWnd, NULL, TRUE);
-         }
+         keyFunctions(grid, &hWnd, &wParam, &g_state);
          break;
       }
       default:
