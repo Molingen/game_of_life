@@ -11,6 +11,7 @@ int grid[GRID_X][GRID_Y] = {0};
 game_state g_state = INSERT_MODE;
 PAINTSTRUCT ps;
 HBRUSH hBrush;
+config_file config = FIRST;
 
 // The main window class name
 static TCHAR szWindowClass[] = _T("DesktopApp");
@@ -81,6 +82,8 @@ int WINAPI WinMain(
       return 1;
    }
 
+   MessageBox(hWnd, "Damn are u plain' game of life?\nnvm, now u're usin' first configuration file\nTo switch between configurations use \"1\" \"2\" \"3\"\n to save / load ur grid in these config use \"S\" or \"L\"\nIf u want to clear current config - \"C\", to see this message again - \"I\"", "INFO", MB_OK | MB_ICONINFORMATION);
+
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
@@ -91,7 +94,6 @@ int WINAPI WinMain(
 
    while (g_state != END_PLS) {
 
-      gameInput(&g_state);
       if (g_state == RUNNING_MODE) {
          render(grid, hWnd);
       }
@@ -125,7 +127,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
          break;
       }
       case WM_KEYDOWN: {
-         keyFunctions(grid, &hWnd, &wParam, &g_state);
+         keyFunctions(grid, &hWnd, &wParam, &g_state, &config);
          break;
       }
       default:
