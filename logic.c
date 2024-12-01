@@ -100,20 +100,6 @@ void draw(const int* grid, const HWND* hwnd, const HBRUSH* hBrush) {
 }
 
 
-
-void gameInput(game_state* g_state) {
-
-   if (GetKeyState(VK_SPACE) == 1) {
-      *g_state = RUNNING_MODE;
-   }
-
-   if (GetKeyState(VK_SPACE) == 0) {
-      *g_state = INSERT_MODE;
-   }
-}
-
-
-
 void leftButtonTrigger(int* grid, const HWND* hwnd, const LPARAM* lParam,const game_state* g_state) {
 
    if (*g_state != INSERT_MODE) {return;}
@@ -184,25 +170,55 @@ void loadGrid(int* grid, const char* filename) {
 
 
 
-void keyFunctions(int* grid, const HWND* hWnd, const WPARAM *wParam, const game_state *g_state) {
-
+void keyFunctions(int* grid, const HWND* hWnd, const WPARAM *wParam, game_state *g_state, config_file* config) {
+   if (*wParam == 0x20) {
+      if (*g_state == RUNNING_MODE) {*g_state = INSERT_MODE;}
+      else {*g_state = RUNNING_MODE;}
+   }
    if (*g_state != INSERT_MODE) {return;}
 
    switch (*wParam) {
       case 'C': {
          clearGrid(grid);
          InvalidateRect(*hWnd, NULL, TRUE);
+         MessageBox(*hWnd, "Grid has been cleared", "Game Action", MB_OK | MB_ICONINFORMATION);
          break;
       }
       case 'S': {
-         saveGrid(grid, "./game.txt");
+         char path[10];
+         sprintf(path, "./%d.txt", *config);
+         saveGrid(grid, path);
+         MessageBox(*hWnd, "Your config has been saved", "Yo bro", MB_OK | MB_ICONINFORMATION);
          break;
       }
       case 'L': {
-         loadGrid(grid, "./game.txt");
+         char path[10];
+         sprintf(path, "./%d.txt", *config);
+         loadGrid(grid, path);
          InvalidateRect(*hWnd, NULL, TRUE);
+         MessageBox(*hWnd, "Your config has been loaded", "Yo bro", MB_OK | MB_ICONINFORMATION);
          break;
       }
+      case '1': {
+         *config = 0;
+         MessageBox(*hWnd, "damn u're usin' first configuration file.\n To save your grid use - s, to load - l", "Game Action", MB_OK | MB_ICONINFORMATION);
+         break;
+      }
+      case '2': {
+         *config = 1;
+         MessageBox(*hWnd, "damn u're usin' second configuration file.\n To save your grid use - s, to load - l", "Game Action", MB_OK | MB_ICONINFORMATION);
+         break;
+      }
+      case '3': {
+         *config = 2;
+         MessageBox(*hWnd, "damn u're usin' third configuration file.\n To save your grid use - s, to load - l", "Game Action", MB_OK | MB_ICONINFORMATION);
+         break;
+      }
+
+      case 'I': {
+         MessageBox(*hWnd, "To switch between configurations use \"1\" \"2\" \"3\"\n to save / load ur grid in these config use \"S\" or \"L\"\nIf u want to clear current config - \"C\", to see this message again - \"I\"", "INFO", MB_OK | MB_ICONINFORMATION);
+      }
+
       default:
          break;
    }
